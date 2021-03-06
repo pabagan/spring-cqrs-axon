@@ -6,7 +6,10 @@ Project from course: [Master Spring Boot Microservices with CQRS & Event sourcin
 
 * Robomongo for Mongo DB Admin GUI: https://robomongo.org/download
 * Spring initializer: https://start.spring.io/ 
+
 ## Run
 ```sh
 docker-compose up
+mvn clean install
 ```
+
