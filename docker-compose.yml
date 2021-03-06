@@ -1,0 +1,119 @@
+version: '3.3'
+
+services:  
+  axon:
+    image: axoniq/axonserver
+    hostname: axonserver
+    container_name: springboot-axon-server
+    restart: always
+    ports:
+      - '8024:8024'
+      - '8124:8124'
+      - '8224:8224'
+    networks:
+      - springNet
+  
+  adminer:
+    image: adminer:latest
+    container_name: springboot-adminer
+    restart: always
+    environment: 
+      ADMINER_DEFAULT_SERVER: mysql
+    ports:
+      - 8080:8080
+    networks:
+      - springNet
+
+  postgres:
+    image: postgres:latest
+    container_name: springboot-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pwd
+    ports:
+      - 5432:5432
+    volumes:
+      - ./persistence/postgres:/var/lib/postgresql/data
+    networks:
+      - springNet
+
+  mysql:
+    image: mysql:latest
+    container_name: springboot-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: mysql
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pwd
+      MYSQL_ROOT_PASSWORD: pwd
+    ports:
+      - 3306:3306
+    volumes:
+      - ./persistence/mysql:/var/lib/mysql
+    networks:
+      - springNet
+  
+  mongo:
+    image: mongo:latest
+    container_name: springboot-mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./persistence/mongo:/data/db
+    networks:
+      - springNet
+
+networks:
+  springNet:
+    # Use a custom driver
+    # driver: custom-driver-1
+    name: springNet
+# docker run --name postgres-1 -e POSTGRES_PASSWORD=postgres -d postgres:9.5.3 tail -f /dev/null
+# docker run --name postgres-2 -e POSTGRES_PASSWORD=postgres -p 5432:5432
+
+# version: '3.3'
+# services:
+#   axonserver:
+#     image: axoniq/axonserver
+#     hostname: axonserver
+#     # volumes:
+#     #   - axonserver-data:/data
+#     #   - axonserver-events:/eventdata
+#     #   - axonserver-config:/config:ro
+#     ports:
+#       - '8024:8024'
+#       - '8124:8124'
+#       - '8224:8224'
+#     networks:
+#       - axon-demo
+
+# volumes:
+#   axonserver-data:
+#   axonserver-events:
+#   axonserver-config:
+
+# volumes:
+#   axonserver-data:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: ${PWD}/data
+#       o: bind
+#   axonserver-events:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: ${PWD}/events
+#       o: bind
+#   axonserver-config:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: ${PWD}/config
+#       o: bind
+
+# networks:
+#   axon-demo:
