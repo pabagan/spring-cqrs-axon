@@ -6,12 +6,12 @@ import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-import org.axonframework.mongo.MongoTemplate;
-import org.axonframework.mongo.DefaultMongoTemplate;
-import org.axonframework.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
-import org.axonframework.mongo.eventsourcing.eventstore.MongoFactory;
-import org.axonframework.mongo.eventsourcing.eventstore.MongoOptionsFactory;
-import org.axonframework.mongo.eventsourcing.tokenstore.MongoTokenStore;
+import org.axonframework.extensions.mongo.DefaultMongoTemplate;
+import org.axonframework.extensions.mongo.MongoTemplate;
+import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoEventStorageEngine;
+import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoFactory;
+import org.axonframework.extensions.mongo.eventsourcing.eventstore.MongoSettingsFactory;
+import org.axonframework.extensions.mongo.eventsourcing.tokenstore.MongoTokenStore;
 import org.axonframework.serialization.Serializer;
 import org.axonframework.spring.config.AxonConfiguration;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,13 +34,9 @@ public class AxonConfig {
     @Bean
     public MongoClient mongo() {
         var mongoFactory = new MongoFactory();
-        mongoFactory.setMongoAddresses(Collections.singletonList(new ServerAddress(mongoHost, mongoPort)));
-        var mongoSettingsFactory = new MongoOptionsFactory();
-
-//        var mongoFactory = new MongoFactory();
-//        var mongoSettingsFactory = new MongoSettingsFactory();
-//        mongoSettingsFactory.setMongoAddresses(Collections.singletonList(new ServerAddress(mongoHost, mongoPort)));
-//        mongoFactory.setMongoClientSettings(mongoSettingsFactory.createMongoClientSettings());
+        var mongoSettingsFactory = new MongoSettingsFactory();
+        mongoSettingsFactory.setMongoAddresses(Collections.singletonList(new ServerAddress(mongoHost, mongoPort)));
+        mongoFactory.setMongoClientSettings(mongoSettingsFactory.createMongoClientSettings());
 
         return mongoFactory.createMongo();
     }
@@ -64,8 +60,8 @@ public class AxonConfig {
     public EventStorageEngine storageEngine(MongoClient client) {
         return MongoEventStorageEngine.builder()
                 .mongoTemplate(DefaultMongoTemplate.builder()
-                        .mongoDatabase(client)
-                        .build())
+                                .mongoDatabase(client)
+                                .build())
                 .build();
     }
 
