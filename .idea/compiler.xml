@@ -10,15 +10,12 @@
         <module name="user.query.api" />
         <module name="user.cmd.api" />
       </profile>
-      <profile name="Annotation profile for Unknown" enabled="true">
-        <sourceOutputDir name="../../target/generated-sources/annotations" />
-        <sourceTestOutputDir name="../../target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="wrapper (2)" />
-        <module name="wrapper (1)" />
-        <module name="wrapper (3)" />
-      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="wrapper (1)" target="1.5" />
+      <module name="wrapper (2)" target="1.5" />
+      <module name="wrapper (3)" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
